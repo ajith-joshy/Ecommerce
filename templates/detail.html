@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+ <div class="about-box-main">
+        <div class="container">
+            <div class="row">
+				<div class="col-lg-6">
+                    <div class="banner-frame"> <img class="img-fluid" src="{{product.image.url}}" alt="" />
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h5 class="noo-sh-title-top">{{i.title}}</h5>
+                    <h2>Description:{{product.description}}</h2>
+                    <h2>Available:{{product.stock}}</h2>
+                    <h2>Price:{{product.price}}</h2>
+                    {% if user.is_superuser == True %}
+                        <a class="btn hvr-hover" href="{% url 'shop:add' product.id %}">Add Stock</a>
+                    {% else %}
+                        {% if product.stock > 0 %}
+                            <a class="btn hvr-hover" href="{% url 'cart:addtocart' product.id %}">Add to Cart</a>
+                        {% else %}
+                            <h3>Out of Stock</h3>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row my-5">
+                <div class="col-sm-6 col-lg-4">
+                    <div class="service-block-inner">
+                        <h3>We are Trusted</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="service-block-inner">
+                        <h3>We are Professional</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="service-block-inner">
+                        <h3>We are Expert</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+ </div>
+{% endblock %}
+
