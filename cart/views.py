@@ -53,6 +53,7 @@ class Cart_view(View):
         context={'cart':c,'total':total}
         return render(request,'cart.html',context)
 
+import uuid
 from .forms import Orderform
 class Checkout(View):
     def get(self,request):
@@ -89,7 +90,19 @@ class Checkout(View):
                 context={'payment':response_payment}
                 return render(request,'payment.html',context)
             else:   #COD
-                pass
+                id='ORD_COD'+uuid.uuid4().hex[:14]
+                o.order_id=id
+                o.is_ordered=True
+                o.save()
+            #add products to Order_items
+            for i in c:
+                item = Order_items.objects.create(order=o, product=i.product, quantity=i.quantity)
+                item.save()
+                item.product.stock -= i.quantity
+                item.product.save()
+            # Delete Cart Table
+            c.delete()
+            return render(request,'payment.html')
 
 # @csrf_exempt
 # def f():
@@ -99,10 +112,36 @@ class Checkout(View):
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
+from .models import Order,Order_items
 @method_decorator(csrf_exempt,name="dispatch")
 class Payment_success(View):
     def post(self,request):
         print(request.user.username)
         response=request.POST
-        print(response)
+        # print(response)
+
+        #Updates Order Table
+        id=response['razorpay_order_id']    #reads the order id from the razorpay response
+        o=Order.objects.get(order_id=id)    #retreieves the order record matching with the order id
+        o.is_ordered=True   #Set is_ordered status to True
+        o.save()
+
+        #Add products into Order_items Table
+        u=request.user
+        c=Cart.objects.filter(user=u)
+        for i in c:
+            item=Order_items.objects.create(order=o,product=i.product,quantity=i.quantity)
+            item.save()
+            item.product.stock-=i.quantity
+            item.product.save()
+        #Delete Cart Table
+        c.delete()
         return render(request,'payment_success.html')
+
+class Your_orders(View):
+    def get(self,request):
+        u=request.user
+        o=Order.objects.filter(user=u,is_ordered=True)
+        context={'your_orders':o}
+        return render(request,'your_orders.html',context)
+

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-
+{% if payment %}
 <!-- Start All Title Box -->
     <div class="all-title-box">
         <div class="container">
@@ -36,5 +36,7 @@
 <!--    {{payment.id}}-->
 <input type="hidden" custom="Hidden Element" name="hidden"/>
 </form>
-
+{% else %}
+<h2>Order Submitted Successfully</h2>
+{% endif %}
 {% endblock %}

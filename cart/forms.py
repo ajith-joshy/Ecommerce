@@ -1,5 +1,6 @@
 from django import forms
-from .models import Order
+from .models import Order, Order_items
+
 
 class Orderform(forms.ModelForm):
     payment_choices=(('COD','COD'),('ONLINE','ONLINE'))
@@ -7,3 +8,4 @@ class Orderform(forms.ModelForm):
     class Meta:
         model=Order
         fields=['address','phone','payment_method']
+

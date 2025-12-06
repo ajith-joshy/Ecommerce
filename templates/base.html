@@ -146,6 +146,7 @@
                                 <li class="nav-item"><a class="nav-link" href="{% url 'shop:category' %}">Add categories</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{% url 'shop:product' %}">Add products</a></li>
                             {% endif %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'cart:your_orders' %}">Your Orders</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'shop:logout' %}">Logout</a></li>
                         {% else %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'shop:register' %}">Register</a></li>

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for i in your_orders %}
+    <div class="container mt-3 mb-3 border border-2 border-light shadow">
+    <h2>{{i.order_id}}</h2>
+    <h2>{{i.amount}}</h2>
+    <h2>{{i.ordered_date}}</h2>
+    <h2>{{i.delivery_status}}</h2>
+        {% for j in i.products.all %}
+            <div class="container">
+            <img src="{{j.product.image.url}}" width="150">
+            <h2>{{j.quantity}}</h2>
+            <h2>{{j.product.name}}</h2>
+            <h2>{{j.product.price}}</h2>
+            </div>
+        {% endfor %}
+        </div>
+{% endfor %}
+
+{% endblock %}
