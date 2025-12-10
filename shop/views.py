@@ -1,4 +1,7 @@
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render,redirect
+from django.utils.decorators import method_decorator
 from django.views import View
 from .models import Category
 from django.contrib.auth import authenticate,login,logout
@@ -59,7 +62,20 @@ class Userlogin(View):
                 messages.error(request, "Invalid credentials")
                 return redirect('shop:login')
 
+from django.contrib.auth.decorators import login_required
 from .forms import Categoryform,Productform
+
+from django.http import HttpResponse
+def admin_required(fun):
+    def wrapper(request):
+        if not request.user.is_superuser:
+            return HttpResponse("not allowed")
+        else:
+            return fun(request)
+    return wrapper
+
+@method_decorator(admin_required,name="dispatch")
+@method_decorator(login_required,name="dispatch")
 class Add_category(View):
     def get(self, request):
         cf = Categoryform()
@@ -71,6 +87,7 @@ class Add_category(View):
             cf.save()
         return render(request, 'addcategory.html')
 
+@method_decorator(login_required,name="dispatch")
 class Add_product(View):
     def get(self, request):
         pf = Productform()

@@ -1,11 +1,13 @@
-import razorpay
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 # Create your views here.
 
 from shop.models import Product
 from cart.models import Cart
+from django.contrib.auth.decorators import login_required
+@method_decorator(login_required,name="dispatch")
 class Addtocart(View):
     def get(self,request,i):
         #product
@@ -54,6 +56,7 @@ class Cart_view(View):
         return render(request,'cart.html',context)
 
 import uuid
+import razorpay
 from .forms import Orderform
 class Checkout(View):
     def get(self,request):
