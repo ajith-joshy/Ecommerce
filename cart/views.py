@@ -25,8 +25,10 @@ class Addtocart(View):
 
 class Removefromcart(View):
     def get(self,request,i):
+        u=request.user
         try:
-            c=Cart.objects.get(id=i)
+            p=Product.objects.get(id=i)
+            c=Cart.objects.get(user=u,product=p)
             if c.quantity>1:
                 c.quantity-=1
                 c.save()
